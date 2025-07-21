@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +16,6 @@ jobs:
           HOST: ${{ secrets.EC2_HOST }}
           USER: ${{ secrets.EC2_USER }}
         run: |
-          echo "$PRIVATE_KEY" > github-ec2.pem && chmod 600 github-ec2.pem
-          scp -i github-ec2.pem docker-compose.yml $EC2_USER@$EC2_HOST:docker-compose.yml
-          ssh -i github-ec2.pem $EC2_USER@$EC2_HOST "docker compose up -d"
+          echo "$PRIVATE_KEY" > github-ec2.key && chmod 600 github-ec2.key
+          scp -i github-ec2.key docker-compose.yml $USER@$HOST:docker-compose.yml
+          ssh -i github-ec2.key $USER@$HOST "docker compose up -d"
